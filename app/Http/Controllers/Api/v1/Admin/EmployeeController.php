@@ -58,13 +58,12 @@ class EmployeeController extends Controller
         ],200);
     }
 
-    public function status(Request $request){
+    public function status(Request $request,$id){
         $request->validate([
-            "id" => "required|exists:employees,id",
             "status" => "required|in:1,0"
         ]);
 
-        Employee::find($request->id)->update(['status' => $request->status]);
+        Employee::find($id)->update(['status' => $request->status]);
 
         return response([
             "message" => "Employee Status Updated",
@@ -99,6 +98,11 @@ class EmployeeController extends Controller
     // add soft delete
     public function destroy(string $id)
     {
-        //
+        Employee::find($id)->delete();
+
+        return response([
+            "message" => "Employee Deleted Successfully",
+            "success" => true
+        ],200);
     }
 }
